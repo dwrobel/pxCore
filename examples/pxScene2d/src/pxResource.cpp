@@ -553,6 +553,37 @@ void rtImageResource::loadResourceFromFile()
   rtString status = "resolve";
   rtData d;
   rtError loadImageSuccess = rtLoadFile(mUrl, d);
+  if (loadImageSuccess != RT_OK) {
+    if ( *((const char*)mUrl) != '/' ) {
+      static struct _node_path {
+          std::string d[10];
+          int         c;
+
+          _node_path() : c(0) {
+              const char *env = ::getenv("NODE_PATH");
+              const char *ptr = env, *last = env;
+              while( ( *ptr++ ) && ( c < 10 ) ) {
+                  if( ( *ptr == 0 ) || ( *ptr == ':' ) ) {
+                      d[c] = std::string( last, ptr );
+                      if( d[c][d[c].size()-1] != '/' )
+                          d[c] += "/";
+                      ++c;
+                      if( *ptr == 0 )
+                          break;
+                      last = ++ptr;
+                  }
+              }
+          }
+      } node_path;
+      for( int i = 0; i < node_path.c; ++i ) {
+          if (rtLoadFile((node_path.d[i] + (const char*)mUrl).c_str(), d) == RT_OK)
+          {
+              loadImageSuccess = RT_OK;
+              break;
+          }
+      }
+    }
+  }
   if (loadImageSuccess == RT_OK)
   {
     loadImageSuccess = pxLoadImage((const char *) d.data(), d.length(), imageOffscreen, init_w, init_h, init_sx, init_sy);
