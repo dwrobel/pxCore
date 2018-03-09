@@ -1,5 +1,5 @@
-[![codecov](https://codecov.io/gh/pxscene/pxCore/branch/master/graph/badge.svg)](https://codecov.io/gh/pxscene/pxCore)
-[![coverity](https://scan.coverity.com/projects/13125/badge.svg)](https://scan.coverity.com/projects/pxcore)
+[![Linux build status](https://semaphoreci.com/api/v1/dwrobel/pxcore/branches/onemw-wayland-egl-200/shields_badge.svg)](https://semaphoreci.com/dwrobel/pxcore)
+[![Windows build status](https://ci.appveyor.com/api/projects/status/isygj1i8cupcoi04/branch/onemw-wayland-egl-51?svg=true)](https://ci.appveyor.com/project/dwrobel/pxcore/branch/onemw-wayland-egl-200)
 
 # pxCore
 
