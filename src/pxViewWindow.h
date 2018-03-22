@@ -60,7 +60,7 @@ protected:
   virtual void onKeyUp(uint32_t keycode, uint32_t flags);
   virtual void onChar(uint32_t codepoint);
 
-  virtual void onDraw();
+  virtual void onDraw(pxSurfaceNative s);
 
 private:
   pxViewRef mView;

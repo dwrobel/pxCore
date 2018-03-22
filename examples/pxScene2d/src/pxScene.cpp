@@ -358,7 +358,7 @@ protected:
     EXITSCENELOCK()
   }
 
-  virtual void onDraw()
+  virtual void onDraw(pxSurfaceNative )
   {
     ENTERSCENELOCK()
     if (mView)

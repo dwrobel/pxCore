@@ -617,6 +617,12 @@ waylandBuffer* pxWindowNative::nextBuffer()
 void pxWindowNative::drawFrame(wl_callback *callback, pxRect *rect)
 {
     struct wl_surface * waylandSurface = (struct wl_surface *)wl_shell_surface_get_user_data(mWaylandSurface);
+    pxSurfaceNativeDesc d;
+    d.windowWidth = mLastWidth;
+    d.windowHeight = mLastHeight;
+    waylandBuffer *buffer = nextBuffer();
+    struct wl_buffer *waylandBuffer = buffer->buffer;
+    d.pixelData = (uint32_t*)buffer->shm_data;
 
     int left = 0;
     int top = 0;
@@ -631,7 +637,7 @@ void pxWindowNative::drawFrame(wl_callback *callback, pxRect *rect)
         height = rect->height();
     }
 
-    onDraw();
+    onDraw(&d);
 
     //attach and bind buffer
     wl_surface_attach(waylandSurface, waylandBuffer, 0, 0);
