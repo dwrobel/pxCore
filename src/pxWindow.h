@@ -87,7 +87,7 @@ public:
   // pxSurfaceNative abstracts a platform specific drawing surface
   // to perform platform specific drawing please see pxWindowNative.h
   // for the definition of this type
-  virtual void onDraw(pxSurfaceNative /*s*/) {}
+  virtual void onDraw() {}
   
 };
 
