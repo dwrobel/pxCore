@@ -703,7 +703,6 @@ public:
   }
 
   virtual void markBranchDirty();
-
 public:
   rtEmitRef mEmit;
 
@@ -1153,7 +1152,6 @@ public:
   pxIViewContainer* getViewContainer() {
     return mViewContainer;
   }
-
 protected:
 
   static rtError getScene(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
@@ -1575,7 +1573,6 @@ public:
   pxScriptView* getScriptView() {
     return mScriptView;
   }
-
 private:
   bool bubbleEvent(rtObjectRef e, rtRef<pxObject> t, 
                    const char* preEvent, const char* event) ;
