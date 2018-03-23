@@ -158,7 +158,6 @@ class pxFontManager;
 class pxObject: public rtObject
 {
 public:
-
   rtDeclareObject(pxObject, rtObject);
   rtReadOnlyProperty(_pxObject, _pxObject, voidPtr);
   rtProperty(parent, parent, setParent, rtObjectRef);
@@ -1000,7 +999,6 @@ static int pxSceneContainerCount = 0;
 class pxSceneContainer: public pxViewContainer
 {
 public:
-
   rtDeclareObject(pxSceneContainer, pxViewContainer);
   rtProperty(url, url, setUrl, rtString);
 #ifdef ENABLE_PERMISSIONS_CHECK
