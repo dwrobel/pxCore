@@ -1047,7 +1047,6 @@ void pxObject::update(double t)
       }
     }
   } updateTree(this) ;
-
   // Update animations
   vector<animation>::iterator it = mAnimations.begin();
 
