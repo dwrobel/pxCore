@@ -1014,7 +1014,6 @@ void pxObject::animateToInternal(const char* prop, double to, double duration,
   mAnimations.push_back(a);
 
   markBranchDirty();
-
   pxAnimate *animObj = (pxAnimate *)a.animateObj.getPtr();
 
   if (NULL != animObj)
@@ -1765,7 +1764,6 @@ bool pxObject::onTextureReady()
   #ifdef PX_DIRTY_RECTANGLES
   mIsDirty = true;
   markBranchDirty();
-
   #endif //PX_DIRTY_RECTANGLES
   return false;
 }
@@ -3793,7 +3791,6 @@ rtError pxScriptView::setPermissions(const rtObjectRef& v)
   }
   return RT_FAIL;
 }
-
 void pxObject::markBranchDirty() {
   if (!mIsTreeDirty) {
     mIsTreeDirty = true;
@@ -3817,5 +3814,4 @@ void pxRoot::markBranchDirty() {
     pxObject::markBranchDirty();
   }
 }
-
 #endif
