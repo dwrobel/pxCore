@@ -158,6 +158,7 @@ class pxFontManager;
 class pxObject: public rtObject
 {
 public:
+
   rtDeclareObject(pxObject, rtObject);
   rtReadOnlyProperty(_pxObject, _pxObject, voidPtr);
   rtProperty(parent, parent, setParent, rtObjectRef);
@@ -702,6 +703,8 @@ public:
      return RT_OK;
   }
 
+  virtual void markBranchDirty();
+
 public:
   rtEmitRef mEmit;
 
@@ -768,6 +771,7 @@ class pxRoot: public pxObject
   rtDeclareObject(pxRoot, pxObject);
 public:
   pxRoot(pxScene2d* scene): pxObject(scene) {}
+  virtual void markBranchDirty();
 };
 
 class pxViewContainer: public pxObject, public pxIViewContainer
@@ -996,6 +1000,7 @@ static int pxSceneContainerCount = 0;
 class pxSceneContainer: public pxViewContainer
 {
 public:
+
   rtDeclareObject(pxSceneContainer, pxViewContainer);
   rtProperty(url, url, setUrl, rtString);
 #ifdef ENABLE_PERMISSIONS_CHECK
@@ -1147,6 +1152,10 @@ public:
     return mEmit->delListener(eventName, f);
   }
   
+  pxIViewContainer* getViewContainer() {
+    return mViewContainer;
+  }
+
 protected:
 
   static rtError getScene(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
@@ -1564,6 +1573,10 @@ public:
   rtError getService(rtString name, rtObjectRef& returnObject);
   rtError getService(const char* name, const rtObjectRef& ctx, rtObjectRef& service);
   rtError getAvailableApplications(rtString& availableApplications);
+
+  pxScriptView* getScriptView() {
+    return mScriptView;
+  }
 
 private:
   bool bubbleEvent(rtObjectRef e, rtRef<pxObject> t, 
