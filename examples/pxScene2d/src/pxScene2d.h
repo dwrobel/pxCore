@@ -702,7 +702,9 @@ public:
      return RT_OK;
   }
 
+#ifdef PX_DIRTY_RECTANGLES
   virtual void markBranchDirty();
+#endif
 public:
   rtEmitRef mEmit;
 
@@ -769,7 +771,6 @@ class pxRoot: public pxObject
   rtDeclareObject(pxRoot, pxObject);
 public:
   pxRoot(pxScene2d* scene): pxObject(scene) {}
-  virtual void markBranchDirty();
 };
 
 class pxViewContainer: public pxObject, public pxIViewContainer

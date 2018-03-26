@@ -1013,7 +1013,9 @@ void pxObject::animateToInternal(const char* prop, double to, double duration,
 
   mAnimations.push_back(a);
 
+#ifdef PX_DIRTY_RECTANGLES
   markBranchDirty();
+#endif
   pxAnimate *animObj = (pxAnimate *)a.animateObj.getPtr();
 
   if (NULL != animObj)
@@ -1038,15 +1040,6 @@ void pxObject::update(double t)
   return;
 #endif
 
-  struct MarkBranchDirtyOnExit {
-    pxObject* _o;
-    MarkBranchDirtyOnExit(pxObject* _o) : _o(_o) {}
-    ~MarkBranchDirtyOnExit() {
-        if (_o->mAnimations.size()) {
-          _o->markBranchDirty();
-      }
-    }
-  } updateTree(this) ;
   // Update animations
   vector<animation>::iterator it = mAnimations.begin();
 
@@ -3790,27 +3783,27 @@ rtError pxScriptView::setPermissions(const rtObjectRef& v)
   }
   return RT_FAIL;
 }
+#ifdef PX_DIRTY_RECTANGLES
 void pxObject::markBranchDirty() {
-  if (!mIsTreeDirty) {
-    mIsTreeDirty = true;
-    if (mParent) {
-      mParent->markBranchDirty();
-    }
-  }
-}
 
-void pxRoot::markBranchDirty() {
-  if (!mIsTreeDirty) {
-    if (mScene) {
-      if (auto sv = mScene->getScriptView()) {
-        if (auto vc = sv->getViewContainer()) {
-          if (typeid(*vc) == typeid(pxSceneContainer)) {
-            static_cast<pxSceneContainer*>(vc)->markBranchDirty();
-          }
+  pxObject* o = this;
+
+  while (o->mParent && !o->mParent->mIsTreeDirty) {
+      o->mIsTreeDirty = true;
+      o = o->mParent;
+  }
+
+  o->mIsTreeDirty = true;
+
+  if (auto scene = o->mScene) {
+    if (auto sv = scene->getScriptView()) {
+      if (auto vc = sv->getViewContainer()) {
+        if (typeid(*vc) == typeid(pxSceneContainer)) {
+          static_cast<pxSceneContainer*>(vc)->markBranchDirty();
         }
       }
     }
-    pxObject::markBranchDirty();
   }
 }
+#endif
 #endif
