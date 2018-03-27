@@ -668,13 +668,7 @@ rtError pxObject::Set(const char* name, const rtValue* value)
 {
   #ifdef PX_DIRTY_RECTANGLES
   mIsDirty = true;
-  {
-    pxObject *_o = this;
-    while( _o && !_o->mIsTreeDirty ) {
-      _o->mIsTreeDirty = true;
-      _o = _o->mParent;
-    }
-  }
+  markBranchDirty();
   //mScreenCoordinates = getBoundingRectInScreenCoordinates();
 
   #endif //PX_DIRTY_RECTANGLES
@@ -768,13 +762,7 @@ void pxObject::setParent(rtRef<pxObject>& parent)
       parent->mChildren.push_back(this);
 #ifdef PX_DIRTY_RECTANGLES
     mIsDirty = true;
-    {
-      pxObject *_o = this;
-      while( _o && !_o->mIsTreeDirty ) {
-        _o->mIsTreeDirty = true;
-        _o = _o->mParent;
-      }
-    }
+    markBranchDirty();
     mScreenCoordinates = getBoundingRectInScreenCoordinates();
 #endif //PX_DIRTY_RECTANGLES
   }
@@ -1025,6 +1013,9 @@ void pxObject::animateToInternal(const char* prop, double to, double duration,
 
   mAnimations.push_back(a);
 
+#ifdef PX_DIRTY_RECTANGLES
+  markBranchDirty();
+#endif
   pxAnimate *animObj = (pxAnimate *)a.animateObj.getPtr();
 
   if (NULL != animObj)
@@ -1764,13 +1755,7 @@ bool pxObject::onTextureReady()
   repaintParents();
   #ifdef PX_DIRTY_RECTANGLES
   mIsDirty = true;
-  {
-    pxObject *_o = this;
-    while( _o && !_o->mIsTreeDirty ) {
-      _o->mIsTreeDirty = true;
-      _o = _o->mParent;
-    }
-  }
+  markBranchDirty();
   #endif //PX_DIRTY_RECTANGLES
   return false;
 }
@@ -3798,4 +3783,27 @@ rtError pxScriptView::setPermissions(const rtObjectRef& v)
   }
   return RT_FAIL;
 }
+#ifdef PX_DIRTY_RECTANGLES
+void pxObject::markBranchDirty() {
+
+  pxObject* o = this;
+
+  while (o->mParent && !o->mParent->mIsTreeDirty) {
+      o->mIsTreeDirty = true;
+      o = o->mParent;
+  }
+
+  o->mIsTreeDirty = true;
+
+  if (auto scene = o->mScene) {
+    if (auto sv = scene->getScriptView()) {
+      if (auto vc = sv->getViewContainer()) {
+        if (typeid(*vc) == typeid(pxSceneContainer)) {
+          static_cast<pxSceneContainer*>(vc)->markBranchDirty();
+        }
+      }
+    }
+  }
+}
+#endif
 #endif

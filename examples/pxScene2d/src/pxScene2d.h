@@ -702,6 +702,9 @@ public:
      return RT_OK;
   }
 
+#ifdef PX_DIRTY_RECTANGLES
+  virtual void markBranchDirty();
+#endif
 public:
   rtEmitRef mEmit;
 
@@ -1147,6 +1150,9 @@ public:
     return mEmit->delListener(eventName, f);
   }
   
+  pxIViewContainer* getViewContainer() {
+    return mViewContainer;
+  }
 protected:
 
   static rtError getScene(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
@@ -1565,6 +1571,9 @@ public:
   rtError getService(const char* name, const rtObjectRef& ctx, rtObjectRef& service);
   rtError getAvailableApplications(rtString& availableApplications);
 
+  pxScriptView* getScriptView() {
+    return mScriptView;
+  }
 private:
   bool bubbleEvent(rtObjectRef e, rtRef<pxObject> t, 
                    const char* preEvent, const char* event) ;
