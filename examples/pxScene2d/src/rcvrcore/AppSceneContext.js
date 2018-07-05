@@ -356,9 +356,9 @@ AppSceneContext.prototype.runScriptInNewVMContext = function (packageUri, module
         console: console,
         theNamedContext: "Sandbox: " + uri,
         Buffer: Buffer,
-        process: processWrap,
+        process: process,
         require: requireMethod,
-        global: globalWrap,
+        global: global,
         //Function: Function,
         //Uint8Array: Uint8Array,
         setTimeout: function (callback, after, arg1, arg2, arg3) {
