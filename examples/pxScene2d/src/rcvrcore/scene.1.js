@@ -79,14 +79,6 @@ function Scene() {
     return nativeScene.collectGarbage();
   };
 
-  this.suspend = function() {
-    return nativeScene.suspend({});
-  };
-
-  this.resume = function() {
-    return nativeScene.resume({});
-  };
-
   this.loadArchive = function(u) {
     return nativeScene.loadArchive(u);
   };

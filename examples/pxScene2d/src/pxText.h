@@ -101,7 +101,6 @@ public:
   }
 
   virtual void resourceReady(rtString readyResolution);
-  virtual void resourceDirty();
   virtual void sendPromise();
   virtual float getOnscreenWidth();
   virtual float getOnscreenHeight();

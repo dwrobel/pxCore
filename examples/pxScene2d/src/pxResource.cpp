@@ -233,29 +233,10 @@ void pxResource::notifyListeners(rtString readyResolution)
 
   }
   //rtLogDebug("notifyListeners for url=%s Ending\n");
-  //mListeners.clear();
+  mListeners.clear();
   mListenersMutex.unlock();
   
 }
-
-void pxResource::notifyListenersResourceDirty()
-{
-  mListenersMutex.lock();
-  if( mListeners.size() == 0)
-  {
-    mListenersMutex.unlock();
-    return;
-  }
-  for (list<pxResourceListener*>::iterator it = mListeners.begin();
-       it != mListeners.end(); ++it)
-  {
-    (*it)->resourceDirty();
-
-  }
-  mListenersMutex.unlock();
-
-}
-
 void pxResource::raiseDownloadPriority()
 {
   if (!priorityRaised && !mUrl.isEmpty() && mDownloadRequest != NULL)
@@ -287,10 +268,6 @@ rtImageResource::~rtImageResource()
 {
   //rtLogDebug("destructor for rtImageResource for %s\n",mUrl.cString());
   //pxImageManager::removeImage( mUrl);
-  if (mTexture.getPtr())
-  {
-    mTexture->setTextureListener(NULL);
-  }
 }
   
 unsigned long rtImageResource::Release() 
@@ -313,43 +290,6 @@ void rtImageResource::init()
     
   mInitialized = true;
 
-}
-
-void rtImageResource::releaseData()
-{
-  if (mTexture.getPtr())
-  {
-    mTextureMutex.lock();
-    if (mDownloadComplete)
-    {
-      mTexture->unloadTextureData();
-    }
-    mTextureMutex.unlock();
-  }
-  pxResource::releaseData();
-}
-
-void rtImageResource::reloadData()
-{
-  if (!mTexture.getPtr())
-  {
-    mTextureMutex.lock();
-    if (mDownloadComplete)
-    {
-      mTexture->loadTextureData();
-    }
-    mTextureMutex.unlock();
-  }
-  pxResource::reloadData();
-}
-
-void rtImageResource::textureReady()
-{
-  if (gUIThreadQueue)
-  {
-    AddRef();
-    gUIThreadQueue->addTask(pxResource::onResourceDirtyUI, this, NULL);
-  }
 }
 
 int32_t rtImageResource::w() const 
@@ -396,7 +336,6 @@ pxTextureRef rtImageResource::getTexture(bool initializing)
     {
       mTexture = mDownloadedTexture;
       mDownloadedTexture = NULL;
-      mTexture->setTextureListener(this);
     }
     mTextureMutex.unlock();
   }
@@ -468,14 +407,6 @@ void pxResource::setLoadStatus(const char* name, rtValue value)
   mLoadStatusMutex.unlock();
 }
 
-void pxResource::releaseData()
-{
-}
-
-void pxResource::reloadData()
-{
-}
-
 /** 
  * rtImageResource::loadResource()
  * 
@@ -534,18 +465,6 @@ void pxResource::onDownloadCanceledUI(void* context, void* data)
 
   res->Release();
 }
-
-void pxResource::onResourceDirtyUI(void* context, void* /*data*/)
-{
-  pxResource* res = (pxResource*)context;
-
-  res->notifyListenersResourceDirty();
-
-  // Release here since we had to addRef when setting up callback to
-  // this function
-  res->Release();
-}
-
 
 void rtImageResource::loadResourceFromFile()
 {
@@ -621,7 +540,6 @@ void rtImageResource::loadResourceFromFile()
   {
     // create offscreen texture for local image
     mTexture = context.createTexture(imageOffscreen, (const char *) d.data(), d.length());
-    mTexture->setTextureListener(this);
     setLoadStatus("statusCode",0);
     // Since this object can be released before we get a async completion
     // We need to maintain this object's lifetime
@@ -633,8 +551,6 @@ void rtImageResource::loadResourceFromFile()
     }
 
   }
-
-  mDownloadComplete = true;
 
 }
 
