@@ -444,8 +444,6 @@ public:
   //}
 
   virtual void update(double t);
-  virtual void releaseData(bool sceneSuspended);
-  virtual void reloadData(bool sceneSuspended);
 
   // non-destructive applies transform on top of of provided matrix
   virtual void applyMatrix(pxMatrix4f& m)
@@ -770,7 +768,6 @@ protected:
   pxContextFramebufferRef mDrawableSnapshotForMask;
   pxContextFramebufferRef mMaskSnapshot;
   bool mIsDisposed;
-  bool mSceneSuspended;
 
  private:
   rtError _pxObject(voidPtr& v) const {
@@ -1061,8 +1058,6 @@ public:
   virtual void createNewPromise(){ rtLogDebug("pxSceneContainer ignoring createNewPromise\n"); }
 
   virtual void* getInterface(const char* name);
-  virtual void releaseData(bool sceneSuspended);
-  virtual void reloadData(bool sceneSuspended);
   
 private:
   rtRef<pxScriptView> mScriptView;
@@ -1169,9 +1164,6 @@ public:
   {
     return mEmit->delListener(eventName, f);
   }
-
-  rtError suspend(const rtValue& v, bool& b);
-  rtError resume(const rtValue& v, bool& b);
   
 protected:
 
@@ -1323,9 +1315,6 @@ public:
   rtMethodNoArgAndNoReturn("logDebugMetrics", logDebugMetrics);
   rtMethodNoArgAndNoReturn("collectGarbage", collectGarbage);
   rtReadOnlyProperty(info, info, rtObjectRef);
-  rtMethod1ArgAndReturn("suspend", suspend, rtValue, bool);
-  rtMethod1ArgAndReturn("resume", resume, rtValue, bool);
-  rtMethodNoArgAndReturn("suspended", suspended, bool);
 /*
   rtMethod1ArgAndReturn("createExternal", createExternal, rtObjectRef,
                         rtObjectRef);
@@ -1463,9 +1452,6 @@ public:
   rtError clock(double & time);
   rtError logDebugMetrics();
   rtError collectGarbage();
-  rtError suspend(const rtValue& v, bool& b);
-  rtError resume(const rtValue& v, bool& b);
-  rtError suspended(bool &b);
 
   rtError addListener(rtString eventName, const rtFunctionRef& f)
   {
@@ -1650,7 +1636,6 @@ private:
 #ifdef ENABLE_PERMISSIONS_CHECK
   rtPermissionsRef mPermissions;
 #endif
-  bool mSuspended;
 public:
   void hidePointer( bool hide )
   {

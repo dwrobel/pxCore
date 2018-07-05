@@ -149,7 +149,7 @@ void pxImageA::update(double t)
 
 void pxImageA::draw()
 {
-  if (getImageAResource() != NULL && mImageLoaded && !mSceneSuspended)
+  if (getImageAResource() != NULL && mImageLoaded)
   {
     pxTimedOffscreenSequence &imageSequence = getImageAResource()->getTimedOffscreenSequence();
     if (imageSequence.numFrames() > 0)
@@ -299,11 +299,6 @@ void pxImageA::resourceReady(rtString readyResolution)
   }
 }
 
-void pxImageA::resourceDirty()
-{
-  pxObject::onTextureReady();
-}
-
 rtError pxImageA::removeResourceListener()
 {
   if (mListenerAdded)
@@ -315,16 +310,6 @@ rtError pxImageA::removeResourceListener()
     mListenerAdded = false;
   }
   return RT_OK;
-}
-
-void pxImageA::releaseData(bool sceneSuspended)
-{
-  pxObject::releaseData(sceneSuspended);
-}
-
-void pxImageA::reloadData(bool sceneSuspended)
-{
-  pxObject::reloadData(sceneSuspended);
 }
 
 rtDefineObject(pxImageA, pxObject);

@@ -114,11 +114,8 @@ void pxText::resourceReady(rtString readyResolution)
       mReady.send("reject",this);
   }     
 }
+       
 
-void pxText::resourceDirty()
-{
-  pxObject::onTextureReady();
-}
 
 void pxText::draw() 
 {

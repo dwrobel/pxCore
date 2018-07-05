@@ -571,7 +571,7 @@ public:
                          mTextureUploaded(false), mTextureDataAvailable(false),
                          mLoadTextureRequested(false), mWidth(0), mHeight(0), mOffscreenMutex(),
                          mFreeOffscreenDataRequested(false), mCompressedData(NULL), mCompressedDataSize(0),
-                         mMipmapCreated(false), mTextureListener(NULL), mTextureListenerMutex()
+                         mMipmapCreated(false)
   {
     mTextureType = PX_TEXTURE_OFFSCREEN;
     addToTextureList(this);
@@ -582,7 +582,7 @@ public:
                                        mTextureUploaded(false), mTextureDataAvailable(false),
                                        mLoadTextureRequested(false), mWidth(0), mHeight(0), mOffscreenMutex(),
                                        mFreeOffscreenDataRequested(false), mCompressedData(NULL), mCompressedDataSize(0),
-                                       mMipmapCreated(false), mTextureListener(NULL), mTextureListenerMutex()
+                                       mMipmapCreated(false)
   {
     mTextureType = PX_TEXTURE_OFFSCREEN;
     setCompressedData(compressedData, compressedDataSize);
@@ -666,13 +666,6 @@ public:
 
     mLoadTextureRequested = false;
     mInitialized = true;
-
-    mTextureListenerMutex.lock();
-    if (mTextureListener != NULL)
-    {
-      mTextureListener->textureReady();
-    }
-    mTextureListenerMutex.unlock();
 
     return PX_OK;
   }
@@ -765,14 +758,6 @@ public:
     }
     mFreeOffscreenDataRequested = false;
     mOffscreenMutex.unlock();
-    return PX_OK;
-  }
-
-  virtual pxError setTextureListener(pxTextureListener* textureListener)
-  {
-    mTextureListenerMutex.lock();
-    mTextureListener = textureListener;
-    mTextureListenerMutex.unlock();
     return PX_OK;
   }
 
@@ -995,8 +980,6 @@ private:
   char* mCompressedData;
   size_t mCompressedDataSize;
   bool mMipmapCreated;
-  pxTextureListener* mTextureListener;
-  rtMutex mTextureListenerMutex;
 
 }; // CLASS - pxTextureOffscreen
 
