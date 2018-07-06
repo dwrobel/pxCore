@@ -1,0 +1,81 @@
+#
+# Copyright 2018 Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Configuration to setup Spark to run visual-tests and reference-app.
+#
+# Usage (assumes you're using bash shell):
+#     source .pxsceneEnableRequire
+
+# Please don't rename nor move this file to a different location.
+
+spark_exports() {
+    echo ""
+    echo "Spark configuration for visual-tests and reference-app:"
+
+    local scriptdir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+    local pxcoredir=$(realpath ${scriptdir}/../../../..)
+
+    # adjust if needed
+    local refappdir=$(realpath ${pxcoredir}/pxscene-ref-app)
+
+    # adjust if needed
+    local lgiredir=$(realpath ${pxcoredir}/jsv8-plugins)
+
+    local RD='\033[0;31m'
+    local GR='\033[0;32m'
+    local NC='\033[0m'
+
+    NODE_PATH=""
+
+    echo "node search path:"
+
+    for p in ${scriptdir} ${lgiredir}/lgire/src ${lgiredir}/lgire/res ${refappdir}/src; do
+        if [ -d ${p} ]; then
+            echo -e "\t ${GR}[OK]    ${NC} ${p}"
+
+            if [ -n "${NODE_PATH}" ]; then
+                NODE_PATH="${NODE_PATH}:"
+            fi
+
+            NODE_PATH=${NODE_PATH}${p}
+        else
+            echo -e "\t ${RD}[FAILED]${NC} ${p}"
+        fi
+    done
+
+    export NODE_PATH
+
+    export PXSCENE_WINDOW_WIDTH=${PXSCENE_WINDOW_WIDTH:-1280}
+    export PXSCENE_WINDOW_HEIGHT=${PXSCENE_WINDOW_HEIGHT:-720}
+
+    export PXSCENE_REQUIRE_ENABLE_FILE_PATH=${scriptdir}
+    export PXSCENE_ENABLE_CUSTOM_ANIMATOR=1
+    export PXCORE_FRAMERATE=50
+
+    echo "      resolution: ${PXSCENE_WINDOW_WIDTH}x${PXSCENE_WINDOW_HEIGHT}"
+    echo "       framerate: ${PXCORE_FRAMERATE}"
+    echo " custom animator: ${PXSCENE_ENABLE_CUSTOM_ANIMATOR}"
+    echo ""
+    echo "Launching reference-app:"
+    echo "    ./pxscene.sh ${refappdir}/src/main.js"
+    echo ""
+    echo "Launching visual-tests:"
+    echo "    ./pxscene.sh ${lgiredir}/lgire/src/visual-tests/text-colors.js"
+    echo ""
+}
+
+
+spark_exports
