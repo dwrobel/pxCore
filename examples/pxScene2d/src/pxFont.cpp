@@ -221,16 +221,51 @@ rtError pxFont::init(const char* n)
 {
   mFontMutex.lock();
   mUrl = n;
-   
-  if(FT_New_Face(ft, n, 0, &mFace)) {
-    mFontMutex.unlock();
-    return RT_FAIL;
+  rtError loadFontStatus = RT_FAIL;
+
+  if (FT_New_Face(ft, mUrl, 0, &mFace) == 0) {
+    loadFontStatus = RT_OK;
   }
-  
-  mInitialized = true;
-  setPixelSize(defaultPixelSize);
+
+  if (loadFontStatus != RT_OK) {
+    if ( *((const char*)mUrl) != '/' ) {
+      static struct _node_path {
+          std::string d[10];
+          int         c;
+
+          _node_path() : c(0) {
+              const char *env = ::getenv("NODE_PATH");
+              const char *ptr = env, *last = env;
+              while( ( *ptr++ ) && ( c < 10 ) ) {
+                  if( ( *ptr == 0 ) || ( *ptr == ':' ) ) {
+                      d[c] = std::string( last, ptr );
+                      if( d[c][d[c].size()-1] != '/' )
+                          d[c] += "/";
+                      ++c;
+                      if( *ptr == 0 )
+                          break;
+                      last = ++ptr;
+                  }
+              }
+          }
+      } node_path;
+      for( int i = 0; i < node_path.c; ++i ) {
+          if (FT_New_Face(ft, (node_path.d[i] + (const char*)mUrl).c_str(), 0, &mFace) == 0)
+          {
+              loadFontStatus = RT_OK;
+              break;
+          }
+      }
+    }
+  }
+
+  if(loadFontStatus == RT_OK) {
+    mInitialized = true;
+    setPixelSize(defaultPixelSize);
+  }
+
   mFontMutex.unlock();
-  return RT_OK;
+  return loadFontStatus;
 }
 // This init is used by async callback to load downloaded font file data
 rtError pxFont::init(const FT_Byte*  fontData, FT_Long size, const char* n)
