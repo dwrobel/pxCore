@@ -19,7 +19,8 @@ cmake \
   -DBUILD_PXSCENE_STATIC_LIB=ON \
   -DPXSCENE_TEST_HTTP_CACHE=OFF \
   -DBUILD_DEBUG_METRICS=ON \
-  -DCMAKE_CXX_FLAGS="-fno-delete-null-pointer-checks -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated-declarations -Wformat=2 -Wno-format-y2k -Wall -Werror -Wextra -Wno-cast-function-type -Wno-class-memaccess -Woverloaded-virtual -Wno-strict-aliasing -Wno-unused-function -DMESA_EGL_NO_X11_HEADERS -O0 -g0 -DPXSCENE_DISABLE_WST_DECODER" ..
+  -DCMAKE_CXX_FLAGS="-fno-delete-null-pointer-checks -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated-declarations -Wformat=2 -Wno-format-y2k -Wall -Werror -Wextra -Woverloaded-virtual -Wno-strict-aliasing -Wno-unused-function -DMESA_EGL_NO_X11_HEADERS -O0 -g0 -DPXSCENE_DISABLE_WST_DECODER" ..
+#  -DCMAKE_CXX_FLAGS="-fno-delete-null-pointer-checks -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated-declarations -Wformat=2 -Wno-format-y2k -Wall -Werror -Wextra -Wno-cast-function-type -Wno-class-memaccess -Woverloaded-virtual -Wno-strict-aliasing -Wno-unused-function -DMESA_EGL_NO_X11_HEADERS -O0 -g0 -DPXSCENE_DISABLE_WST_DECODER" ..
 #  -DCMAKE_CXX_FLAGS="-fno-delete-null-pointer-checks -Wall -Werror -Wextra -Werror=unused-but-set-variable -Wno-unused-parameter -Wno-deprecated-declarations -Wno-sign-compare -Wno-unused-parameter -Wno-deprecated-declarations -DMESA_EGL_NO_X11_HEADERS -O0 -g3 -DPXSCENE_DISABLE_WST_DECODER -std=gnu++14" ..
 time make -j$(nproc) VERBOSE=1 && echo "ok"
 popd
