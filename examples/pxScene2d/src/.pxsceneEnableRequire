@@ -21,22 +21,49 @@
 
 # Please don't rename nor move this file to a different location.
 
+
+spark_find_dir() {
+    local basedir="$1"
+    local childdir="$2"
+
+    for i in $(seq 8); do
+        local dir=${basedir}/${childdir}
+
+        if [ -d ${dir} ]; then
+            echo $(realpath ${dir})
+            return
+        fi
+
+        local childdir="../${childdir}"
+    done
+
+    echo ""
+}
+
+
 spark_exports() {
+    local RD='\033[0;31m'
+    local GR='\033[0;32m'
+    local NC='\033[0m'
+
     echo ""
     echo "Spark configuration for visual-tests and reference-app:"
 
     local scriptdir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-    local pxcoredir=$(realpath ${scriptdir}/../../../..)
 
-    # adjust if needed
-    local refappdir=$(realpath ${pxcoredir}/pxscene-ref-app)
+    local refappdir=$(spark_find_dir ${scriptdir} pxscene-ref-app)
 
-    # adjust if needed
-    local lgiredir=$(realpath ${pxcoredir}/jsv8-plugins)
+    if [ -z "${refappdir}" ]; then
+        echo -e "${RD}ERROR:${NC} Could not found ${GR}pxscene-ref-app${NC} repository."
+        return 1;
+    fi
 
-    local RD='\033[0;31m'
-    local GR='\033[0;32m'
-    local NC='\033[0m'
+    local lgiredir=$(spark_find_dir ${scriptdir} jsv8-plugins)
+
+    if [ -z "${lgiredir}" ]; then
+        echo -e "${RD}ERROR:${NC} Could not found ${GR}jsv8-plugins${NC} repository."
+        return 1;
+    fi
 
     NODE_PATH=""
 
