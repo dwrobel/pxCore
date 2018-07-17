@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 #include "pxArchive.h"
-
+#include "rtPathUtils.h"
 #include "rtThreadQueue.h"
 
 extern rtThreadQueue* gUIThreadQueue;
@@ -133,15 +133,37 @@ rtError pxArchive::initFromUrl(const rtString& url, const rtString& origin)
     mLoadStatus.set("sourceType", "file");
     // TODO align statusCodes for loadStatus
 
-    if (rtLoadFile(url, mData) == RT_OK)
+    do
     {
-      mLoadStatus.set("statusCode",0);
-      process(mData.data(),mData.length());
-    }
-    else
-    {
-      mLoadStatus.set("statusCode",1);
-    }
+      if (rtLoadFile(url, mData) == RT_OK)
+      {
+        mLoadStatus.set("statusCode", 0);
+        process(mData.data(), mData.length());
+        break;
+      }
+
+      if (rtIsPathAbsolute(url))
+      {
+        mLoadStatus.set("statusCode", 1);
+        break;
+      }
+
+      rtModuleDirs *dirs = rtModuleDirs::instance();
+      int statusCode = 1;
+
+      for (rtModuleDirs::iter it = dirs->iterator(); it.first != it.second; it.first++)
+      {
+        if (rtLoadFile(rtConcatenatePath(*it.first, url.cString()).c_str(), mData) == RT_OK)
+        {
+          statusCode = 0;
+          process(mData.data(), mData.length());
+          break;
+        }
+      }
+
+      mLoadStatus.set("statusCode", statusCode);
+    } while (0);
+
     if (gUIThreadQueue)
     {
       gUIThreadQueue->addTask(pxArchive::onDownloadCompleteUI,this,NULL);

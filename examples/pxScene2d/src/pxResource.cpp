@@ -27,6 +27,7 @@
 #include "pxResource.h"
 #include "pxUtil.h"
 #include "rtThreadPool.h"
+#include "rtPathUtils.h"
 
 using namespace std;
 
@@ -556,6 +557,27 @@ void rtImageResource::loadResourceFromFile()
   rtString status = "resolve";
   rtData d;
   rtError loadImageSuccess = rtLoadFile(mUrl, d);
+
+  do
+  {
+    if (loadImageSuccess == RT_OK)
+      break;
+
+    if (rtIsPathAbsolute(mUrl))
+      break;
+
+    rtModuleDirs *dirs = rtModuleDirs::instance();
+
+    for (rtModuleDirs::iter it = dirs->iterator(); it.first != it.second; it.first++)
+    {
+      if (rtLoadFile(rtConcatenatePath(*it.first, mUrl.cString()).c_str(), d) == RT_OK)
+      {
+        loadImageSuccess = RT_OK;
+        break;
+      }
+    }
+  } while(0);
+
   if (loadImageSuccess == RT_OK)
   {
     loadImageSuccess = pxLoadImage((const char *) d.data(), d.length(), imageOffscreen, init_w, init_h, init_sx, init_sy);
