@@ -1,10 +1,14 @@
 match_max 32
 expect "(gdb) "
-send "r\n"
+send "r\n";
 expect "(gdb) "
 send "thread apply all bt full\n";
 expect "(gdb) "
 # sometimes this is more readable
 send "thread apply all bt\n";
+expect "(gdb) "
+# TODO: add automatic detection of node version
+send "p v8::internal::Isolate::Current()->PrintStack((FILE*) stdout, 1)\n";
+# quit the session
 expect "(gdb) "
 send "quit\n";
