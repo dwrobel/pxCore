@@ -18,8 +18,6 @@
 
 // rtNode.cpp
 
-#ifdef RTSCRIPT_SUPPORT_NODE
-
 #if defined WIN32
 #include <Windows.h>
 #include <direct.h>
@@ -59,7 +57,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "rtScriptV8Node.h"
+#include "rtScriptNode.h"
 
 
 #include "rtCore.h"
@@ -89,7 +87,7 @@
 #include "rtObjectWrapper.h"
 #include "rtFunctionWrapper.h"
 
-using namespace rtScriptV8NodeUtils;
+using namespace rtScriptNodeUtils;
 
 
 #define SANDBOX_IDENTIFIER  ( (const char*) "_sandboxStuff" )
@@ -1359,5 +1357,3 @@ rtError createScriptNode(rtScriptRef& script)
   script = new rtScriptNode(false);
   return RT_OK;
 }
-
-#endif // RTSCRIPT_SUPPORT_NODE

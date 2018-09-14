@@ -18,9 +18,6 @@ limitations under the License.
 
 "use strict";
 
-var isDuk=(typeof Duktape != "undefined")?true:false;
-var isV8=(typeof _isV8 != "undefined")?true:false;
-
 var fs = require("fs");
 // keep different name for http and https from js engine
 var http_global = require("http");
@@ -76,15 +73,17 @@ function loadFile(fileUri) {
           fileUri = fileUri.substring(1);
         }
       }
-
-      fs.readFile(fileUri, function (err, data) {
-          if (err) {
-              log.error("FAILED to read file[" + fileUri + "] from file system (error=" + err + ")");
-              reject(err);
-          } else {
-              log.message(3, "Got file[" + fileUri + "] from file system");
-              resolve(data);
-          }
+      var infile = fs.createReadStream(fileUri);
+      infile.on('data', function (data) {
+        code += data;
+      });
+      infile.on('end', function () {
+        log.message(3, "Got file[" + fileUri + "] from file system");
+        resolve(code);
+      });
+      infile.on('error', function (err) {
+        log.error("FAILED to read file[" + fileUri + "] from file system");
+        reject(err);
       });
     }
   });

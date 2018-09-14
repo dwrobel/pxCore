@@ -26,7 +26,7 @@ extern bool gIsPumpingJavaScript;
 #endif
 using namespace v8;
 
-namespace rtScriptV8NodeUtils
+namespace rtScriptNodeUtils
 {
 
 static const char* kClassName = "Function";
@@ -107,7 +107,7 @@ void rtResolverFunction::afterWorkCallback(uv_work_t* req, int /* status */)
   Local<Context> local_context = resolver->CreationContext();
   Context::Scope context_scope(local_context);
 
-#if defined ENABLE_NODE_V_6_9 || defined RTSCRIPT_SUPPORT_V8
+#ifdef ENABLE_NODE_V_6_9
   TryCatch tryCatch(resolverFunc->mIsolate);
 #else
   TryCatch tryCatch;
@@ -194,7 +194,7 @@ void rtFunctionWrapper::create(const FunctionCallbackInfo<Value>& args)
   wrapper->Wrap(args.This());
 }
 
-#if defined ENABLE_NODE_V_6_9 || defined RTSCRIPT_SUPPORT_V8
+#ifdef ENABLE_NODE_V_6_9
 Handle<Object> rtFunctionWrapper::createFromFunctionReference(v8::Local<v8::Context>& ctx, Isolate* isolate, const rtFunctionRef& func)
 #else
 Handle<Object> rtFunctionWrapper::createFromFunctionReference(Isolate* isolate, const rtFunctionRef& func)

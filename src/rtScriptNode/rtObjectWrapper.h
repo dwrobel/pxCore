@@ -23,7 +23,7 @@ limitations under the License.
 
 using namespace v8;
 
-namespace rtScriptV8NodeUtils
+namespace rtScriptNodeUtils
 {
 
 class rtObjectWrapper : public rtWrapper<rtObjectRef, rtObjectWrapper>
@@ -109,12 +109,14 @@ private:
 #ifndef RT_WRAPPER_UTILS
 #define RT_WRAPPER_UTILS
 
-#include "headers.h"
+#include <node.h>
+#include <v8.h>
+
 #include <rtObject.h>
 #include <rtString.h>
 #include <rtValue.h>
 
-namespace rtScriptV8NodeUtils
+namespace rtScriptNodeUtils
 {
 
 inline rtString toString(const v8::Handle<v8::Object>& obj)

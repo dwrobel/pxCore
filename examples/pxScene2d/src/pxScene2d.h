@@ -1177,8 +1177,6 @@ public:
   
 protected:
 
-  static rtError printFunc(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
-
   static rtError getScene(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
   static rtError makeReady(int /*numArgs*/, const rtValue* /*args*/, rtValue* result, void* ctx);
 
@@ -1295,7 +1293,6 @@ protected:
   rtObjectRef mReady;
   rtObjectRef mScene;
   rtRef<pxIView> mView;
-  rtRef<rtFunctionCallback> mPrintFunc;
   rtRef<rtFunctionCallback> mGetScene;
   rtRef<rtFunctionCallback> mMakeReady;
   rtRef<rtFunctionCallback> mGetContextID;

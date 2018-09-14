@@ -19,10 +19,9 @@ limitations under the License.
 "use strict";
 
 var isDuk = (typeof timers != "undefined")?true:false;
-var isV8 = (typeof _isV8 != "undefined")?true:false;
 
 // FIXME !!!!!!!!!! duktape merge hack
-if (!isDuk && !isV8) {
+if (!isDuk) {
   var JSZip = require("jszip");
 }
 

@@ -18,18 +18,12 @@
 
 // rtScriptNode.h
 
-#ifndef RTSCRIPTV8NODE_H
-#define RTSCRIPTV8NODE_H
+#ifndef RTSCRIPTNODE_H
+#define RTSCRIPTNODE_H
 
 
-#ifdef RTSCRIPT_SUPPORT_V8
-rtError createScriptV8(rtScriptRef& script);
-#endif
-
-#ifdef RTSCRIPT_SUPPORT_NODE
 rtError createScriptNode(rtScriptRef& script);
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif // RTSCRIPTV8_H
+#endif // RTSCRIPTNODE_H

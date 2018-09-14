@@ -18,8 +18,6 @@ limitations under the License.
 
 "use strict";
 
-var isDuk=(typeof Duktape != "undefined")?true:false;
-var isV8=(typeof _isV8 != "undefined")?true:false;
 var Logger = require('rcvrcore/Logger').Logger;
 var SceneModuleLoader = require('rcvrcore/SceneModuleLoader');
 var log = new Logger('AsyncFileAcquisition');
@@ -60,9 +58,7 @@ AsyncFileAcquisition.prototype.acquire = function(uri) {
           }
           self.requestMap[uri].listeners = null;
           delete self.requestMap[uri];
-          if (!isDuk && !isV8) {
-            process._tickCallback();
-          }
+          process._tickCallback();
         })
         .catch(function(error){
           console.error("Error");

@@ -27,7 +27,7 @@ limitations under the License.
 #  include <condition_variable>
 #endif
 
-namespace rtScriptV8NodeUtils
+namespace rtScriptNodeUtils
 {
 
 class rtAbstractFunction : public rtIFunction
@@ -63,7 +63,7 @@ public:
 public:
   static void exportPrototype(v8::Isolate* isolate, v8::Handle<v8::Object> exports);
   static void destroyPrototype();
-#if defined ENABLE_NODE_V_6_9 || defined RTSCRIPT_SUPPORT_V8
+#ifdef ENABLE_NODE_V_6_9
   static v8::Handle<v8::Object> createFromFunctionReference(v8::Local<v8::Context>& ctx, v8::Isolate* isolate, const rtFunctionRef& func);
 #else
   static v8::Handle<v8::Object> createFromFunctionReference(v8::Isolate* isolate, const rtFunctionRef& func);
