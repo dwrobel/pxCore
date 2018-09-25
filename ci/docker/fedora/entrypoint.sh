@@ -15,8 +15,15 @@
 # limitations under the License.
 #
 
-groupadd --gid $GID "$USER" || test $? = 9
+groupadd --non-unique --gid $GID "$USER" || test $? = 9
 useradd --no-create-home -G wheel,video --uid $UID --gid $GID "$USER" || test $? = 9
+
+if [ -z ${XGD_RUNTIME_DIR} ]; then
+    XGD_RUNTIME_DIR=/run/user/$UID
+    mkdir -p ${XGD_RUNTIME_DIR}
+    chown -R $UID:$GID ${XGD_RUNTIME_DIR}
+    export XGD_RUNTIME_DIR
+fi
 
 cd "$CWD"
 
