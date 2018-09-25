@@ -187,7 +187,7 @@ make_build() {
 # Configure debugger
 configure_debugger() {
   if ! env | grep -e '^DBG='; then
-    export DBG="gdb -nx -x ${SCRIPT_DIR}/gdb-script.txt --args"
+    export DBG="gdb -iex 'set build-id-verbose 0' -nx -x ${SCRIPT_DIR}/gdb-script.txt --args"
   fi
 }
 
