@@ -15,8 +15,25 @@
 # limitations under the License.
 #
 
-groupadd --gid $GID "$USER" || test $? = 9
-useradd --no-create-home -G wheel,video --uid $UID --gid $GID "$USER" || test $? = 9
+groupadd --non-unique --gid $GID "$USER" || test $? = 9
+
+grps=$(stat -c "%G" /dev/dri/card* 2>/dev/null || echo "")
+
+if [ x${grps} != "x" ]; then
+    grps="${grps},"
+fi
+
+grps=${grps}"wheel"
+
+useradd --no-create-home -G $grps --uid $UID --gid $GID "$USER" || test $? = 9
+
+if [ -z ${XDG_RUNTIME_DIR} ]; then
+    XDG_RUNTIME_DIR=/run/user/$UID
+    mkdir -p ${XDG_RUNTIME_DIR}
+    chown $UID:$UID ${XDG_RUNTIME_DIR}
+    chmod 0700 ${XDG_RUNTIME_DIR}
+    export XDG_RUNTIME_DIR
+fi
 
 cd "$CWD"
 
