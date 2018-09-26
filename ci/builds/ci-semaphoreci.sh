@@ -60,9 +60,11 @@ if [ -n "${SEMAPHORE}" ]; then
     free || true
 
     # Let's try to release some unused resources
-    for s in apache2 elasticsearch cassandra mongod sphinxsearch; do
+    for s in apache2 elasticsearch cassandra mongod mysql sphinxsearch memcached postgresql rabbitmq-server redis-server; do
         sudo service $s stop || true
     done
+
+    killall -9 Xvfb || true
 
     free || true
 
