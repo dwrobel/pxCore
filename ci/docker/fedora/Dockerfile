@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-FROM dwrobel/spark:latest
+FROM dwrobel/spark:29
 
 # RUN dnf update -y
 
