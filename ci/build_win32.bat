@@ -11,17 +11,9 @@
 @rem
 
 cmake --version
-if exist c:\python27amd64 (
-    @rem check for Azure python2
-    set path "c:\python27amd64;%path%"
-    dir c:\python27amd64
-) else (
-    if exist c:\python27 (
-    @rem check for Appveyor python2
-    set path "c:\python27;%path%"
-    dir c:\python27
-    )
-)
+
+@rem Use python2.7 on Azure (https://github.com/Microsoft/azure-pipelines-image-generation/blob/master/images/win/Vs2017-Server2016-Readme.md)
+if exist c:\python27amd64 set PATH=c:\python27amd64;%PATH%
 python --version
 
 set "ORIG_DIR=%CD%"
