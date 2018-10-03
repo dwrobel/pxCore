@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright 2018 Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
 #
@@ -14,21 +15,13 @@
 # limitations under the License.
 #
 
-jobs:
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-16.04'
-  steps:
-  - script: ci/builds/ci-travis.sh
+set -e
+set -x
 
-#- job: macOS
-#  pool:
-#    vmImage: 'macOS-10.13'
-#  steps:
-#  - script: echo hello from macOS
+SCRIPT_DIR=$(cd `dirname $0` && pwd)
 
-- job: Windows
-  pool:
-    vmImage: 'vs2017-win2016'
-  steps:
-  - script: ci\build_win32.bat
+pushd "${SCRIPT_DIR}"
+
+unset DISPLAY
+
+time ./dw.sh ./script-runall.sh "$@" $CI_EXTRA_ARG
