@@ -11,6 +11,17 @@
 @rem
 
 cmake --version
+if exist c:\python27amd64 (
+    @rem check for Azure python2
+    set path "c:\python27amd64;%path%"
+    dir c:\python27amd64
+) else (
+    if exist c:\python27 (
+    @rem check for Appveyor python2
+    set path "c:\python27;%path%"
+    dir c:\python27
+    )
+)
 python --version
 
 set "ORIG_DIR=%CD%"
@@ -21,6 +32,7 @@ set "BASE_DIR=%CD%"
 
 set "VSCMD_START_DIR=%CD%"
 call "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvars32.bat" x86
+if %errorlevel% neq 0 call "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Auxiliary/Build/vcvars32.bat" x86
 
 @rem build dependencies
 cd examples/pxScene2d/external
