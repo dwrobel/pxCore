@@ -88,6 +88,9 @@ if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
 move ..\examples\pxScene2d\src\Release\Spark.exe ..\examples\pxScene2d\src\Release\SparkEdge.exe
 )
 
+
+if "%SKIP_INSTALLER%" == "True" GOTO scriptEnd
+
 echo Building installer...
 cpack --verbose .
 if %errorlevel% neq 0  (
