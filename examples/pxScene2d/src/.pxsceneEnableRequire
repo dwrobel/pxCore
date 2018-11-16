@@ -51,10 +51,10 @@ spark_exports() {
 
     local scriptdir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
-    local refappdir=$(spark_find_dir ${scriptdir} pxscene-ref-app)
+    local refappdir=$(spark_find_dir ${scriptdir} refapp)
 
     if [ -z "${refappdir}" ]; then
-        echo -e "${RD}ERROR:${NC} Could not found ${GR}pxscene-ref-app${NC} repository."
+        echo -e "${RD}ERROR:${NC} Could not found ${GR}refapp${NC} repository."
         return 1;
     fi
 
