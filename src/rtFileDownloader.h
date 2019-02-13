@@ -230,7 +230,7 @@ public:
 
 private:
     rtFileDownloader();
-    ~rtFileDownloader();
+    virtual ~rtFileDownloader();
 
     void startNextDownload(rtFileDownloadRequest* downloadRequest);
     rtFileDownloadRequest* nextDownloadRequest();
