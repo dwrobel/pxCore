@@ -36,7 +36,7 @@ This document describes the core actors in the system along with the underlying 
 	    
 ----------
 ## FUNCTIONAL SPECIFICATION
-**Object Discovery** : Client can located the object registered (by server) using rtRemoteLocateObject() method. But before registering or locating both server & client should initialize the environment.
+**Object Discovery** : Client can locate the object registered (by server) using rtRemoteLocateObject() method. But before registering or locating both server & client should initialize the environment.
 
 Server Side :	
 	
