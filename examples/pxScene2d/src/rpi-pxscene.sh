@@ -1,4 +1,5 @@
-#
+#!/bin/sh
+
 # Copyright 2018 Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-#!/bin/sh
 
 export WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-WPE}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/0/}
