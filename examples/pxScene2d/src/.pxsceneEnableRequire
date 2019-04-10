@@ -26,11 +26,11 @@ spark_find_dir() {
     local basedir="$1"
     local childdir="$2"
 
-    for i in $(seq 8); do
+    for i in $(/usr/bin/seq 8); do
         local dir=${basedir}/${childdir}
 
         if [ -d ${dir} ]; then
-            echo $(realpath ${dir})
+            echo $(/usr/bin/realpath ${dir})
             return
         fi
 
@@ -49,7 +49,7 @@ spark_exports() {
     echo ""
     echo "Spark configuration for visual-tests and reference-app:"
 
-    local scriptdir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+    local scriptdir=$(cd $(/usr/bin/dirname ${BASH_SOURCE[0]}) && /bin/pwd)
 
     local refappdir=$(spark_find_dir ${scriptdir} refapp)
 
